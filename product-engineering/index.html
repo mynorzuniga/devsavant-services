@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Product Engineering · DevSavant</title>
+<meta name="description" content="DevSavant is your embedded product team: we build AI-first software, operate intelligent agents, and govern every AI asset from creation to production."/>
+<link rel="icon" href="assets/logo-devsavant-isotype-color.png"/>
+<style>
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+@font-face { font-family:"Mulish"; font-weight:300; font-display:swap; src:url("fonts/mulish/Mulish-Light-latin.woff2") format("woff2"); }
+@font-face { font-family:"Mulish"; font-weight:400; font-display:swap; src:url("fonts/mulish/Mulish-Regular-latin.woff2") format("woff2"); }
+@font-face { font-family:"Mulish"; font-weight:600; font-display:swap; src:url("fonts/mulish/Mulish-SemiBold-latin.woff2") format("woff2"); }
+@font-face { font-family:"Mulish"; font-weight:700; font-display:swap; src:url("fonts/mulish/Mulish-Bold-latin.woff2") format("woff2"); }
+@font-face { font-family:"Mulish"; font-weight:900; font-display:swap; src:url("fonts/mulish/Mulish-Black-latin.woff2") format("woff2"); }
+@font-face { font-family:"Roboto"; font-weight:300; font-display:swap; src:url("fonts/roboto/Roboto-Light-latin.woff2") format("woff2"); }
+@font-face { font-family:"Roboto"; font-weight:400; font-display:swap; src:url("fonts/roboto/Roboto-Regular-latin.woff2") format("woff2"); }
+@font-face { font-family:"Roboto"; font-weight:500; font-display:swap; src:url("fonts/roboto/Roboto-Medium-latin.woff2") format("woff2"); }
+@font-face { font-family:"Roboto"; font-weight:700; font-display:swap; src:url("fonts/roboto/Roboto-Bold-latin.woff2") format("woff2"); }
+
+:root {
+  --ds-green:#51AE7B; --ds-ink:#1B1E1C; --ds-teal:#76C4B1;
+  --ds-fog:#E2ECEB; --ds-forest:#0D442A;
+  --ds-green-30:rgba(81,174,123,.30); --ds-green-12:rgba(81,174,123,.12);
+  --ds-ink-90:rgba(27,30,28,.90); --ds-ink-60:rgba(27,30,28,.60);
+  --ds-ink-30:rgba(27,30,28,.30); --ds-ink-12:rgba(27,30,28,.12);
+  --ds-ink-06:rgba(27,30,28,.06);
+  --bg:#fff; --bg-subtle:var(--ds-fog); --surface-muted:#F6F9F8;
+  --fg:var(--ds-ink); --fg-muted:var(--ds-ink-60);
+  --border:var(--ds-ink-12); --accent:var(--ds-green);
+  --font-display:"Mulish",system-ui,sans-serif;
+  --font-body:"Roboto",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#fff;color:var(--ds-ink);}
+body{font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;line-height:1.08;text-wrap:balance;margin:0;}
+a{color:var(--ds-forest);text-decoration:none;border-bottom:1px solid transparent;}
+a:hover{color:var(--accent);border-bottom-color:currentColor;}
+#root{min-height:100vh;overflow-x:clip;}
+::selection{background:var(--ds-green-30);color:var(--ds-forest);}
+html{scroll-behavior:smooth;}
+[id]{scroll-margin-top:80px;}
+
+/* Nav */
+@media(max-width:768px){.nav-service-label{display:none!important;}}
+.nav-mobile{display:none!important;}
+.nav-desktop{display:flex;}
+@media(max-width:768px){.nav-mobile{display:flex!important;}.nav-desktop{display:none!important;}}
+
+/* FAQ */
+.faq-chev{transition:transform 200ms cubic-bezier(.2,.7,.1,1);}
+.faq-open .faq-chev{transform:rotate(180deg);}
+
+/* Heartbeat animations */
+@keyframes hb-ping{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2.2);opacity:0;}}
+@keyframes live-pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.hb-ring-1{animation:hb-ping 1.8s ease-out infinite;}
+.live-dot{animation:live-pulse 1.8s ease-in-out infinite;}
+
+/* Responsive */
+@media(max-width:920px){
+  .mobile-stack{grid-template-columns:1fr!important;}
+  .pillar-grid{grid-template-columns:1fr 1fr!important;}
+  .kpi-grid{grid-template-columns:1fr 1fr!important;}
+  .benefit-grid{grid-template-columns:1fr 1fr!important;}
+  .gov-card-grid{grid-template-columns:1fr 1fr!important;}
+  .train-grid{grid-template-columns:1fr 1fr!important;row-gap:36px!important;}
+  .train-line{display:none!important;}
+  .spectrum-grid{grid-template-columns:1fr 1fr!important;}
+  .footer-grid{grid-template-columns:1fr 1fr!important;}
+  .cta-steps{grid-template-columns:1fr!important;}
+  .op-grid{grid-template-columns:1fr 1fr!important;}
+  .how-grid{grid-template-columns:1fr!important;}
+  .how-line{display:none!important;}
+  .dark-section-intro{gap:20px!important;margin-bottom:28px!important;}
+  .dark-section-intro-body{padding-top:0!important;}
+  .heartbeat-callout{padding:24px 20px!important;}
+  .heartbeat-callout .mobile-stack{gap:24px!important;}
+}
+@media(max-width:768px){
+  section{padding-top:64px!important;padding-bottom:64px!important;}
+  .hero-section{padding-top:110px!important;}
+  .hero-h1{font-size:38px!important;}
+  .spectrum-grid{grid-template-columns:1fr!important;}
+  .security-grid{grid-template-columns:1fr!important;}
+  .faq-sticky{position:static!important;}
+  .uc-scenario-col{display:none!important;}
+  .uc-row{grid-template-columns:1fr 1fr!important;}
+  .uc-inner{min-width:0!important;}
+  .mobile-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .compare-inner{min-width:600px;}
+}
+@media(max-width:560px){
+  .pillar-grid,.kpi-grid,.benefit-grid,.gov-card-grid,.footer-grid,.op-grid{grid-template-columns:1fr!important;}
+  .hero-h1{font-size:34px!important;}
+}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+// ── Shared text constants ─────────────────────────────────────────────────────
+const H2 = { fontFamily:'Mulish,sans-serif', fontWeight:700, fontSize:'clamp(32px,3.8vw,52px)', lineHeight:1.08, letterSpacing:'-.022em', color:'var(--ds-ink)', margin:0, textWrap:'balance' };
+const BodyLg = { fontFamily:'Roboto,sans-serif', fontSize:17, lineHeight:1.65, color:'var(--ds-ink-90)', textWrap:'pretty' };
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+function Container({ children, max=1180, style }) {
+  return <div style={{ maxWidth:max, margin:'0 auto', padding:'0 28px', ...style }}>{children}</div>;
+}
+
+// ── Icon library (lucide-style) ───────────────────────────────────────────────
+function Ico({ name, size=22, color='var(--ds-forest)', sw=1.7 }) {
+  const p = { fill:'none', stroke:color, strokeWidth:sw, strokeLinecap:'round', strokeLinejoin:'round' };
+  const paths = {
+    catalog:   <><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" {...p}/><path d="M8 3v18M12 8h5M12 12h5M12 16h5" {...p}/></>,
+    check:     <><path d="M9 12l2 2 4-4" {...p}/><circle cx="12" cy="12" r="9" {...p}/></>,
+    shield:    <><path d="M12 3 19 6V12C19 16 15.5 19 12 21C8.5 19 5 16 5 12V6Z" {...p}/><path d="M9 12 11 14 15 10" {...p}/></>,
+    grad:      <><path d="M22 10 12 5 2 10l10 5 10-5z" {...p}/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5" {...p}/></>,
+    chart:     <><path d="M3 3v18h18" {...p}/><path d="M7 15l3-4 3 2 4-6" {...p}/></>,
+    arrow:     <><path d="M5 12h14M13 5l7 7-7 7" {...p}/></>,
+    key:       <><circle cx="8" cy="15" r="4" {...p}/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2" {...p}/></>,
+    log:       <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" {...p}/><polyline points="14 2 14 8 20 8" {...p}/><path d="M16 13H8M16 17H8M10 9H8" {...p}/></>,
+    revoke:    <><circle cx="12" cy="12" r="9" {...p}/><path d="M5.6 5.6 18.4 18.4" {...p}/></>,
+    lock:      <><rect x="4" y="11" width="16" height="10" rx="2" {...p}/><path d="M8 11V7a4 4 0 0 1 8 0v4" {...p}/></>,
+    users:     <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" {...p}/><circle cx="9" cy="7" r="4" {...p}/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" {...p}/></>,
+    doc:       <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" {...p}/><polyline points="14 2 14 8 20 8" {...p}/></>,
+    ban:       <><circle cx="12" cy="12" r="9" {...p}/><path d="M5.6 5.6 18.4 18.4" {...p}/></>,
+    sliders:   <><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" {...p}/></>,
+    flask:     <><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3" {...p}/><path d="M7 16h10" {...p}/></>,
+    route:     <><circle cx="6" cy="19" r="3" {...p}/><circle cx="18" cy="5" r="3" {...p}/><path d="M9 19h6a4 4 0 0 0 0-8H9a4 4 0 0 1 0-8" {...p}/></>,
+    star:      <><path d="m12 3 1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9z" {...p}/><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8z" {...p}/></>,
+    mobile:    <><rect x="6" y="2" width="12" height="20" rx="2" {...p}/><path d="M11 18h2" {...p}/></>,
+    web:       <><rect x="3" y="3" width="18" height="18" rx="2" {...p}/><path d="M3 9h18M9 21V9" {...p}/></>,
+    bolt:      <><path d="M13 2 3 14h7l-1 8 10-12h-7z" {...p}/></>,
+    monitor:   <><path d="M3 12 H6 L8.5 6 L12 18 L14.5 10 L17 13 H21" {...p}/></>,
+    recover:   <><path d="M5 12 A7 7 0 1 1 12 19" {...p}/><path d="M5 12 V8 M5 12 H9" {...p}/></>,
+    update:    <><circle cx="12" cy="12" r="7" {...p}/><path d="M12 8 V12 L14.5 14.5" {...p}/></>,
+    act: null, graph: null,
+  };
+  return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>;
+}
+
+// ── Pill button ───────────────────────────────────────────────────────────────
+function Pill({ children, variant='outline-dark', arrow=false, onClick, href, size='md', style }) {
+  const [h, setH] = useState(false);
+  const sz = { sm:{padding:'10px 20px',fontSize:13}, md:{padding:'14px 28px',fontSize:14}, lg:{padding:'16px 34px',fontSize:15} };
+  const base = { display:'inline-flex', alignItems:'center', gap:10, fontFamily:'Mulish,sans-serif', fontWeight:600, lineHeight:1, borderRadius:999, cursor:'pointer', textDecoration:'none', transition:'all 200ms cubic-bezier(.2,.7,.1,1)', border:'1px solid transparent', ...sz[size] };
+  const v = {
+    'outline-dark':  { background:h?'#1B1E1C':'transparent', color:h?'#fff':'#1B1E1C', borderColor:'#1B1E1C' },
+    'outline-green': { background:h?'rgba(81,174,123,.08)':'transparent', color:'#0D442A', borderColor:'#51AE7B' },
+    'solid-green':   { background:h?'linear-gradient(135deg,#3C9466 0%,#0D442A 100%)':'linear-gradient(135deg,#51AE7B 0%,#0D442A 100%)', color:'#fff', border:'none', fontWeight:700, boxShadow:h?'0 10px 26px rgba(81,174,123,.40)':'0 4px 14px rgba(81,174,123,.28)' },
+    'outline-white': { background:h?'rgba(255,255,255,.10)':'transparent', color:'#fff', borderColor:'rgba(255,255,255,.65)' },
+  };
+  const Arr = () => <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 10.5L10.5 3.5M4.5 3.5H10.5V9.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  const props = { onClick, onMouseEnter:()=>setH(true), onMouseLeave:()=>setH(false), style:{...base,...v[variant],...style} };
+  const content = <>{children}{arrow&&<Arr/>}</>;
+  if (href) return <a href={href} {...props}>{content}</a>;
+  return <button {...props}>{content}</button>;
+}
+
+// ── Overline eyebrow ──────────────────────────────────────────────────────────
+function Overline({ children, color='var(--ds-green)' }) {
+  return <div style={{ fontFamily:'Mulish,sans-serif', fontWeight:700, fontSize:12, letterSpacing:'.18em', textTransform:'uppercase', color, marginBottom:14, display:'inline-flex', alignItems:'center', gap:10 }}><span style={{ width:22, height:1.5, background:color, display:'inline-block' }}/>{children}</div>;
+}
+
+// ── Isotype ───────────────────────────────────────────────────────────────────
+function Isotype({ size=28, color='#51AE7B', style }) {
+  return (
+    <svg width={size} height={size*(40/34)} viewBox="0 0 34 40" fill="none" style={style} aria-hidden="true">
+      <defs><linearGradient id="iso-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#76C4B1"/><stop offset="1" stopColor="#0D442A"/></linearGradient></defs>
+      <path d="M17 1 C6 12,1 20,1 27 C1 34,8 39,17 39 C26 39,33 34,33 27 C33 20,28 12,17 1 Z" fill={color==='gradient'?'url(#iso-g)':color}/>
+      <path d="M17 9 C12 14,10 19,13 23 L17 20 L21 23 C24 19,22 14,17 9 Z" fill="#fff" opacity=".92"/>
+      <path d="M13 25 L17 22 L21 25 L21 31 L17 28 L13 31 Z" fill="#fff" opacity=".92"/>
+    </svg>
+  );
+}
+
+// ── Reveal on scroll ──────────────────────────────────────────────────────────
+function Reveal({ children, delay=0, style, as='div', className='' }) {
+  const [shown, setShown] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const ob = new IntersectionObserver(([e])=>{ if(e.isIntersecting){setShown(true);ob.disconnect();} },{threshold:0.12});
+    ob.observe(el); return ()=>ob.disconnect();
+  }, []);
+  const Tag = as;
+  return <Tag ref={ref} className={className} style={{ opacity:shown?1:0, transform:shown?'translateY(0)':'translateY(18px)', transition:`opacity 680ms cubic-bezier(.2,.7,.1,1) ${delay}ms,transform 680ms cubic-bezier(.2,.7,.1,1) ${delay}ms`, ...style }}>{children}</Tag>;
+}
+
+// ── Check tick ────────────────────────────────────────────────────────────────
+function CheckTick({ dark=false }) {
+  const s = dark?'rgba(255,255,255,.70)':'var(--ds-green)';
+  return <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" style={{flexShrink:0}}><circle cx="7.5" cy="7.5" r="6.8" stroke={s} strokeWidth="1.2"/><path d="M4.5 7.8L6.8 10L10.5 5.8" stroke={s} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+}
+
+// ── Nav ───────────────────────────────────────────────────────────────────────
+function Nav() {
+  const links = [
+    { label:'Services',    href:'#services'  },
+    { label:'How we work', href:'#process'   },
+    { label:'Why us',      href:'#why'       },
+    { label:'Contact',     href:'#contact'   },
+  ];
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(()=>{ const f=()=>setScrolled(window.scrollY>12); f(); window.addEventListener('scroll',f,{passive:true}); return()=>window.removeEventListener('scroll',f); },[]);
+  useEffect(()=>{ document.body.style.overflow=menuOpen?'hidden':''; return()=>{document.body.style.overflow='';};  },[menuOpen]);
+  const close=()=>setMenuOpen(false);
+  return (
+    <>
+      <div style={{ position:'fixed',top:0,left:0,right:0,zIndex:41,padding:scrolled?'12px 0 0':'18px 0 0',background:'transparent',transition:'padding 200ms cubic-bezier(.2,.7,.1,1)',pointerEvents:'none' }}>
+        <div style={{pointerEvents:'auto'}}>
+          <Container max={1260}>
+            <nav style={{ background:'#fff',borderRadius:999,boxShadow:scrolled?'0 12px 36px rgba(13,68,42,.10),0 1px 0 rgba(27,30,28,.04)':'0 8px 30px rgba(13,68,42,.06),0 1px 0 rgba(27,30,28,.04)',display:'flex',alignItems:'center',gap:18,padding:'10px 14px 10px 22px',transition:'box-shadow 200ms' }}>
+              <a href="#top" onClick={close} style={{display:'flex',alignItems:'center',gap:12,textDecoration:'none',lineHeight:1,borderBottom:'none'}}>
+                <img src="assets/logo-devsavant-isotype-color.png" alt="DevSavant" style={{height:28,width:'auto',display:'block'}}/>
+                <span style={{display:'flex',alignItems:'center',gap:8,lineHeight:1}}>
+                  <span style={{fontFamily:'Mulish,sans-serif',fontWeight:900,letterSpacing:'.02em',color:'var(--ds-ink)',fontSize:15}}><span style={{fontWeight:900}}>DEV</span><span style={{fontWeight:500}}>SAVANT</span></span>
+                  <span aria-hidden="true" className="nav-service-label" style={{width:1,height:12,background:'var(--ds-ink-12)'}}/>
+                  <span className="nav-service-label" style={{fontFamily:'Mulish,sans-serif',fontWeight:600,fontSize:12,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ds-forest)'}}>Product Engineering</span>
+                </span>
+              </a>
+              <div className="nav-desktop" style={{display:'flex',gap:2,marginLeft:'auto'}}>
+                {links.map(l=><a key={l.label} href={l.href} style={{padding:'10px 14px',borderRadius:999,fontFamily:'Roboto,sans-serif',fontSize:14,fontWeight:500,color:'var(--ds-ink)',textDecoration:'none',borderBottom:'none',transition:'background 180ms'}} onMouseEnter={e=>e.currentTarget.style.background='rgba(81,174,123,.10)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>{l.label}</a>)}
+              </div>
+              <div className="nav-desktop" style={{display:'flex',gap:8}}><Pill variant="solid-green" size="sm" href="#contact" arrow>Book a session</Pill></div>
+              <button className="nav-mobile" onClick={()=>setMenuOpen(o=>!o)} aria-label="Open menu" style={{marginLeft:'auto',background:'transparent',border:'none',cursor:'pointer',width:40,height:40,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="var(--ds-ink)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              </button>
+            </nav>
+          </Container>
+        </div>
+      </div>
+      <div className="nav-mobile" onClick={close} style={{position:'fixed',inset:0,zIndex:49,background:'rgba(8,43,27,.45)',backdropFilter:'blur(2px)',opacity:menuOpen?1:0,pointerEvents:menuOpen?'auto':'none',transition:'opacity 280ms cubic-bezier(.2,.7,.1,1)'}}/>
+      <div className="nav-mobile" style={{position:'fixed',top:0,right:0,bottom:0,zIndex:50,width:288,background:'#fff',boxShadow:'-8px 0 40px rgba(13,68,42,.18)',transform:menuOpen?'translateX(0)':'translateX(100%)',transition:'transform 320ms cubic-bezier(.2,.7,.1,1)',display:'flex',flexDirection:'column',padding:'0 0 32px',overflowY:'auto'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 20px 18px 24px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+          <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:13,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ds-forest)'}}>Menu</span>
+          <button onClick={close} style={{background:'var(--ds-fog)',border:'none',cursor:'pointer',width:36,height:36,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="var(--ds-ink)" strokeWidth="1.8" strokeLinecap="round"/></svg></button>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',padding:'12px 16px',flex:1}}>
+          {links.map(l=><a key={l.label} href={l.href} onClick={close} style={{padding:'14px 12px',borderRadius:10,fontFamily:'Mulish,sans-serif',fontSize:18,fontWeight:600,color:'var(--ds-ink)',textDecoration:'none',borderBottom:'1px solid var(--ds-ink-06)'}}>{l.label}</a>)}
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:10,padding:'0 20px'}}><Pill variant="solid-green" size="sm" href="#contact" arrow onClick={close}>Book a session</Pill></div>
+      </div>
+    </>
+  );
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+function Hero() {
+  return (
+    <section id="top" className="hero-section" style={{position:'relative',background:'linear-gradient(160deg,#06200f 0%,#082B1B 45%,#041510 100%)',padding:'120px 0 96px',overflow:'hidden'}}>
+      <div aria-hidden="true" style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(circle, rgba(81,174,123,.10) 1.5px, transparent 1.5px)',backgroundSize:'28px 28px',pointerEvents:'none'}}/>
+      <div aria-hidden="true" style={{position:'absolute',right:'-12%',bottom:'-40%',width:'55vw',height:'55vw',maxWidth:700,maxHeight:700,borderRadius:'50%',border:'1px solid rgba(255,255,255,.05)',boxShadow:'0 0 0 60px rgba(255,255,255,.015)',pointerEvents:'none'}}/>
+      <Container max={1100}>
+        <Reveal style={{textAlign:'center'}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:10,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.18em',textTransform:'uppercase',color:'var(--ds-green)',marginBottom:26}}>
+            <span style={{width:22,height:1.5,background:'var(--ds-green)',display:'inline-block'}}/>Product Engineering<span style={{width:22,height:1.5,background:'var(--ds-green)',display:'inline-block'}}/>
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1 className="hero-h1" style={{fontFamily:'Mulish,sans-serif',fontWeight:900,fontSize:'clamp(40px,5.2vw,70px)',lineHeight:1.05,letterSpacing:'-0.034em',color:'#fff',textWrap:'balance',margin:'0 auto 28px',textAlign:'center',maxWidth:'18ch'}}>
+            Your partner from prototype{' '}<span style={{color:'var(--ds-green)'}}>to scale.</span>
+          </h1>
+        </Reveal>
+        <Reveal delay={160}>
+          <p style={{fontFamily:'Roboto,sans-serif',fontSize:'clamp(16px,1.5vw,19px)',lineHeight:1.65,textAlign:'center',color:'rgba(255,255,255,.78)',margin:'0 auto 40px',maxWidth:620,textWrap:'pretty'}}>
+            We help funded startups and growth-stage companies turn ideas into working software, fast. Then we operate and govern what we build.{' '}
+            <strong style={{color:'rgba(255,255,255,.95)',fontWeight:600}}>We are not a dev shop. We are an embedded product team that owns outcomes.</strong>
+          </p>
+        </Reveal>
+        <Reveal delay={240} style={{display:'flex',justifyContent:'center',gap:14,flexWrap:'wrap',marginBottom:52}}>
+          <Pill variant="solid-green" size="lg" href="#contact" arrow>Book a discovery session</Pill>
+          <Pill variant="outline-white" size="lg" href="#services">Explore services</Pill>
+        </Reveal>
+        <Reveal delay={340} style={{display:'flex',justifyContent:'center',alignItems:'center',gap:20,flexWrap:'wrap',fontFamily:'Roboto,sans-serif',fontSize:13.5}}>
+          {['No lock-in','Senior team on every engagement','From PoC to production'].map((t,i)=>(
+            <React.Fragment key={t}>
+              {i>0&&<span style={{width:3,height:3,borderRadius:'50%',background:'rgba(255,255,255,.25)'}}/>}
+              <span style={{display:'flex',alignItems:'center',gap:7}}><CheckTick dark/><span style={{color:'rgba(255,255,255,.62)'}}>{t}</span></span>
+            </React.Fragment>
+          ))}
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+
+// ── Service chapter break ─────────────────────────────────────────────────────
+function ServiceChapter({ num, verb, name, tagline, chips, id }) {
+  return (
+    <div id={id} style={{
+      position:'relative', overflow:'hidden',
+      background:'linear-gradient(110deg,#0D442A 0%,#082B1B 55%,#061a12 100%)',
+      padding:'72px 0 68px', borderTop:'3px solid var(--ds-green)',
+    }}>
+      {/* large ghost number */}
+      <div aria-hidden="true" style={{
+        position:'absolute', right:'-2%', top:'50%', transform:'translateY(-50%)',
+        fontFamily:'Mulish,sans-serif', fontWeight:900,
+        fontSize:'clamp(160px,22vw,280px)', lineHeight:1,
+        color:'rgba(255,255,255,.04)', letterSpacing:'-.04em',
+        userSelect:'none', pointerEvents:'none', whiteSpace:'nowrap',
+      }}>{num}</div>
+      {/* dot texture */}
+      <svg aria-hidden="true" style={{position:'absolute',left:0,bottom:0,opacity:.18,pointerEvents:'none'}} width="280" height="160" viewBox="0 0 280 160">
+        <defs><pattern id={`ch-dots-${num}`} width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="rgba(168,224,192,.4)"/></pattern></defs>
+        <rect width="280" height="160" fill={`url(#ch-dots-${num})`}/>
+      </svg>
+      <Container style={{position:'relative'}}>
+        <div style={{display:'flex', alignItems:'center', gap:16, marginBottom:22, flexWrap:'wrap'}}>
+          <span style={{
+            fontFamily:'Mulish,sans-serif', fontWeight:700, fontSize:11,
+            letterSpacing:'.22em', textTransform:'uppercase', color:'#A8E0C0',
+            display:'flex', alignItems:'center', gap:8,
+          }}>
+            <span style={{width:22, height:1.5, background:'#A8E0C0', display:'inline-block'}}/>
+            Service {num} of 03
+          </span>
+          <span style={{width:4, height:4, borderRadius:'50%', background:'rgba(168,224,192,.35)'}}/>
+          <span style={{
+            fontFamily:'Mulish,sans-serif', fontWeight:700, fontSize:11,
+            letterSpacing:'.22em', textTransform:'uppercase', color:'rgba(168,224,192,.55)',
+          }}>{verb}</span>
+        </div>
+        <h2 style={{
+          fontFamily:'Mulish,sans-serif', fontWeight:900,
+          fontSize:'clamp(30px,4.5vw,58px)', lineHeight:1.06, letterSpacing:'-.025em',
+          color:'#fff', margin:'0 0 16px', maxWidth:700, textWrap:'balance',
+        }}>{name}</h2>
+        <p style={{
+          fontFamily:'Roboto,sans-serif', fontSize:17, lineHeight:1.6,
+          color:'rgba(255,255,255,.70)', margin:'0 0 30px', maxWidth:600, textWrap:'pretty',
+        }}>{tagline}</p>
+        <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+          {chips.map(c=>(
+            <a key={c.label} href={c.href} style={{
+              display:'inline-flex', alignItems:'center', gap:7,
+              padding:'8px 16px', borderRadius:999,
+              background:'rgba(168,224,192,.10)', border:'1px solid rgba(168,224,192,.22)',
+              fontFamily:'Mulish,sans-serif', fontWeight:600, fontSize:12,
+              letterSpacing:'.06em', color:'rgba(255,255,255,.78)',
+              textDecoration:'none', transition:'all 160ms',
+            }}
+            onMouseEnter={e=>{ e.currentTarget.style.background='rgba(168,224,192,.18)'; e.currentTarget.style.color='#fff'; }}
+            onMouseLeave={e=>{ e.currentTarget.style.background='rgba(168,224,192,.10)'; e.currentTarget.style.color='rgba(255,255,255,.78)'; }}
+            >{c.label} <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M3 2H8V7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg></a>
+          ))}
+        </div>
+      </Container>
+    </div>
+  );
+}
+
+// ── Full Spectrum ─────────────────────────────────────────────────────────────
+function FullSpectrum() {
+  const cards = [
+    { glyph:'◈', verb:'Build',   n:'01', title:'AI & Product Engineering',        desc:'Dedicated engineering pods that ship AI-first MVPs, proofs of concept, and production software in focused cycles.', href:'#build'   },
+    { glyph:'◊', verb:'Operate', n:'02', title:'AI Consultancy & Managed Agents',  desc:'We advise, build, and run AI agents connected to your real systems. No internal AI ops team required.',             href:'#operate' },
+    { glyph:'◉', verb:'Govern',  n:'03', title:'AI Governance as a Service',       desc:'One operating model: catalog, review, secure, and measure every AI asset from creation to production.',               href:'#govern'  },
+  ];
+  return (
+    <section id="services" style={{background:'#fff',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+      <Container>
+        <Reveal style={{marginBottom:52}}>
+          <Overline>The full spectrum</Overline>
+          <h2 style={{...H2,marginBottom:16,maxWidth:700}}>Build. Operate. Govern.<br/><span style={{color:'var(--ds-ink-60)',fontWeight:400}}>One partner, every phase.</span></h2>
+          <p style={{...BodyLg,maxWidth:620,fontSize:16}}>Most companies hire one vendor to build their AI product, another to run agents, and a third to comply with governance. We do all three, and carry the context across each phase.</p>
+        </Reveal>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginTop:44}} className="pillar-grid">
+          {cards.map((c,i)=><SpectrumCard key={c.verb} card={c} delay={i*80}/>)}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function SpectrumCard({ card, delay }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <Reveal delay={delay}>
+      <div onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{background:'#fff',borderRadius:18,padding:'28px 26px 26px',height:'100%',boxShadow:hover?'0 20px 48px rgba(13,68,42,.14)':'0 8px 24px rgba(13,68,42,.08)',transform:hover?'translateY(-3px)':'none',transition:'transform 220ms cubic-bezier(.2,.7,.1,1),box-shadow 220ms',cursor:'pointer'}} onClick={()=>window.location.hash=card.href}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
+          <span style={{width:46,height:46,borderRadius:12,background:'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{card.glyph}</span>
+          <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.14em',color:'var(--ds-green)'}}>{card.n}</span>
+        </div>
+        <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:10,letterSpacing:'.18em',textTransform:'uppercase',color:'var(--ds-green)',marginBottom:8}}>{card.verb}</div>
+        <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:19,lineHeight:1.2,letterSpacing:'-.01em',color:'var(--ds-ink)',margin:'0 0 10px'}}>{card.title}</h3>
+        <p style={{fontFamily:'Roboto,sans-serif',fontSize:14,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,textWrap:'pretty'}}>{card.desc}</p>
+        <a href={card.href} style={{display:'inline-flex',alignItems:'center',gap:6,marginTop:18,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:13,color:'var(--ds-forest)',textDecoration:'none',borderBottom:'none'}}>
+          Learn more <Ico name="arrow" size={14} color="var(--ds-forest)" sw={2}/>
+        </a>
+      </div>
+    </Reveal>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  SERVICE 01 — BUILD
+// ══════════════════════════════════════════════════════════════════════════════
+
+function BuildService() {
+  return (
+    <>
+      <ServiceChapter
+        id="build"
+        num="01"
+        verb="Build"
+        name="AI & Product Engineering"
+        tagline="Dedicated engineering pods that ship AI-first software in focused cycles, from proof of concept to production-ready platform."
+        chips={[
+          { label:'How we work', href:'#process' },
+          { label:'What we build', href:'#build-what' },
+          { label:'Engagement types', href:'#build-engage' },
+        ]}
+      />
+      {/* ── Intro ── */}
+      <div style={{background:'var(--ds-fog)',padding:'80px 0 80px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container>
+          <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,1.15fr) minmax(0,.85fr)',gap:56,alignItems:'start'}}>
+            <Reveal>
+              <h2 style={{...H2,maxWidth:560}}>Your strategic build partner for <span style={{color:'var(--ds-green)'}}>AI-powered products.</span></h2>
+              <p style={{...BodyLg,fontSize:19,margin:'24px 0 0',maxWidth:600}}>Dedicated project pods deliver working software in focused cycles, with weekly demos. AI is used where it improves speed, quality, or usability, not as a gimmick. We pair consulting-style discovery with hands-on engineering delivery.</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <div style={{padding:'28px 30px',background:'var(--ds-forest)',borderRadius:18,color:'#fff',boxShadow:'0 18px 44px rgba(13,68,42,.22)',position:'relative',overflow:'hidden'}}>
+                <div aria-hidden="true" style={{position:'absolute',right:-30,top:-30,opacity:.1}}><Isotype size={140} color="#fff"/></div>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.18em',textTransform:'uppercase',color:'#A8E0C0',marginBottom:14}}>The DevSavant difference</div>
+                <p style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(18px,2.1vw,23px)',lineHeight:1.3,letterSpacing:'-.01em',margin:0,color:'#fff',textWrap:'balance',position:'relative'}}>
+                  We don't start with code. We start with the problem and build the right thing, not the fast thing.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </div>
+
+      {/* ── How we work — dark band ── */}
+      <div id="process" style={{background:'linear-gradient(180deg,#0A3320 0%,#082B1B 100%)',padding:'96px 0 100px',position:'relative',overflow:'hidden'}}>
+        <svg aria-hidden="true" style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.18}}>
+          <defs><pattern id="build-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="rgba(168,224,192,.18)" strokeWidth="1" fill="none"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#build-grid)"/>
+        </svg>
+        <Container style={{position:'relative'}}>
+          <div className="mobile-stack dark-section-intro" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)',gap:56,alignItems:'start',marginBottom:52}}>
+            <Reveal><Overline color="#A8E0C0">How we work</Overline>
+              <h2 style={{...H2,color:'#fff',marginTop:8}}>Discovery, build, scale. <span style={{color:'#A8E0C0',fontWeight:400}}>Clarity before code.</span></h2>
+            </Reveal>
+            <Reveal delay={100} className="dark-section-intro-body" style={{paddingTop:42}}>
+              <p style={{...BodyLg,color:'rgba(255,255,255,.86)',margin:0}}>Spinning up a team fast is easy. Getting the right thing built quickly is hard. We run a discovery phase before writing a line of code, because upfront clarity is the only thing that prevents expensive rework downstream.</p>
+            </Reveal>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:1,background:'rgba(168,224,192,.18)',borderRadius:16,overflow:'hidden',border:'1px solid rgba(168,224,192,.18)'}} className="gov-card-grid">
+            {[
+              { label:'01 · Discovery', title:'Ground the idea', desc:'Collaborative sessions define the problem, map user needs, and produce a technical blueprint, so development starts with clarity, not guesswork.', ref:'Blueprint · Requirements · Architecture · UI/UX' },
+              { label:'02 · Build',     title:'Ship in cycles',  desc:'A dedicated pod delivers working software in focused cycles with weekly demos. You see progress every week. Nothing hides in a backlog.', ref:'Working software · Weekly demos · QA included' },
+              { label:'03 · Scale',     title:'Grow the team',   desc:'Once validated, we transition to a dedicated team via Global Staffing across LATAM and Asia, or continue with ongoing maintenance and new features.', ref:'Dedicated team · Maintenance · Roadmap' },
+            ].map((p,i)=>(
+              <Reveal key={p.label} delay={i*80}>
+                <div style={{background:'rgba(13,68,42,.55)',padding:'26px 24px',backdropFilter:'blur(4px)'}}>
+                  <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:9,letterSpacing:'.18em',textTransform:'uppercase',color:'#A8E0C0',marginBottom:10}}>{p.label}</div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:19,lineHeight:1.2,letterSpacing:'-.01em',color:'#fff',margin:'0 0 10px'}}>{p.title}</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.55,color:'rgba(255,255,255,.78)',margin:0,textWrap:'pretty'}}>{p.desc}</p>
+                  <div style={{marginTop:14,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:9,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(255,255,255,.38)'}}>{p.ref}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </div>
+
+      {/* ── What we build — fog ── */}
+      <section id="build-what" style={{background:'var(--ds-fog)',padding:'96px 0 100px'}}>
+        <Container>
+          <Reveal><Overline>What we build</Overline>
+            <h2 style={{...H2,maxWidth:720}}>From AI products to <span style={{color:'var(--ds-ink-60)',fontWeight:400}}>the tools that run your business.</span></h2>
+            <p style={{...BodyLg,maxWidth:680,margin:'20px 0 0'}}>We build across the full stack: AI-native products, SaaS platforms, native mobile apps, and the internal automation tools that eliminate manual work. Every project starts from your problem, not from a technology shortlist.</p>
+          </Reveal>
+          <div className="pillar-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginTop:44}}>
+            {[
+              { ico:'star',   n:'01', name:'AI Products',       desc:'LLM integrations, speech recognition, computer vision, and generative AI pipelines built into real software, not demos.' },
+              { ico:'web',    n:'02', name:'Web Platforms',     desc:'SaaS applications, self-service portals, and admin tools with the performance and architecture to survive growth.' },
+              { ico:'mobile', n:'03', name:'Native Mobile Apps', desc:'Swift, Kotlin, and React Native. Modern architecture, tested on real devices, shipped to production.' },
+              { ico:'bolt',   n:'04', name:'Automation & Tools', desc:'Support workflows, data pipelines, internal dashboards, and the operational glue your team currently handles by hand.' },
+              { ico:'sliders',n:'05', name:'Proofs of Concept', desc:'A focused engagement to validate technical feasibility in 1–4 weeks, before you commit to a full build.' },
+            ].map((p,i)=>(
+              <Reveal key={p.name} delay={i*80}>
+                <div style={{background:'#fff',borderRadius:18,padding:'28px 26px 26px',height:'100%',boxShadow:'0 8px 24px rgba(13,68,42,.08)'}}>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
+                    <span style={{width:46,height:46,borderRadius:12,background:'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center'}}>
+                      <Ico name={p.ico}/>
+                    </span>
+                    <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.14em',color:'var(--ds-green)'}}>{p.n}</span>
+                  </div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:19,lineHeight:1.2,letterSpacing:'-.01em',color:'var(--ds-ink)',margin:'0 0 10px'}}>{p.name}</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:14,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,textWrap:'pretty'}}>{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+            <Reveal delay={5*80} style={{display:'flex'}}>
+              <div style={{flex:1,borderRadius:18,padding:'28px 28px',background:'linear-gradient(135deg,#51AE7B 0%,#0D442A 100%)',color:'#fff',display:'flex',flexDirection:'column',justifyContent:'space-between',minHeight:180,boxShadow:'0 14px 36px rgba(13,68,42,.20)'}}>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:19,lineHeight:1.2,letterSpacing:'-.01em',textWrap:'balance'}}>Senior engineers. Quality that doesn't slip from PoC to production.</div>
+                <a href="#contact" style={{display:'inline-flex',alignItems:'center',gap:8,marginTop:18,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:14,color:'#fff',textDecoration:'none',borderBottom:'none'}}>
+                  Start a discovery call <Ico name="arrow" size={16} color="#fff" sw={2}/>
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Engagement types — white ── */}
+      <section id="build-engage" style={{background:'#fff',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container max={1180}>
+          <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,.85fr) minmax(0,1.4fr)',gap:56,alignItems:'start'}}>
+            <Reveal><Overline>Engagement types</Overline>
+              <h2 style={{...H2,marginTop:8}}>Pick the right scope. Start proving value immediately.</h2>
+              <p style={{...BodyLg,margin:'20px 0 0'}}>Every engagement starts with a discovery session. Then we scope to the right size: a focused proof, a launchable MVP, or a full production release.</p>
+            </Reveal>
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              {[
+                { name:'Proof of Concept', weeks:'1–4 weeks',   desc:'Validate technical feasibility before committing to a full build. We define what "working" means up front, and deliver exactly that.' },
+                { name:'MVP',              weeks:'4–12 weeks',  desc:'Ship core features to real users for market validation. Opinionated architecture, clean code, no cut corners that haunt you at scale.' },
+                { name:'Production-Ready', weeks:'12–20 weeks', desc:'Enterprise-grade deployment with hardened infrastructure, security review, and architecture designed to grow with your team.' },
+              ].map((e,i)=>(
+                <Reveal key={e.name} delay={i*60}>
+                  <div style={{background:'#fff',border:'1px solid var(--ds-ink-06)',borderRadius:14,padding:'20px 22px',display:'flex',gap:18,alignItems:'flex-start',boxShadow:'0 2px 10px rgba(13,68,42,.04)'}}>
+                    <span style={{width:40,height:40,borderRadius:10,background:'var(--ds-green-12)',flexShrink:0,display:'inline-flex',alignItems:'center',justifyContent:'center'}}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="var(--ds-forest)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="9" stroke="var(--ds-forest)" strokeWidth="1.7"/></svg>
+                    </span>
+                    <div>
+                      <div style={{display:'flex',alignItems:'baseline',gap:10,marginBottom:4}}>
+                        <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:16,color:'var(--ds-ink)',letterSpacing:'-.005em'}}>{e.name}</span>
+                        <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:10,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ds-green)'}}>{e.weeks}</span>
+                      </div>
+                      <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.55,color:'var(--ds-ink-60)',margin:0,textWrap:'pretty'}}>{e.desc}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+              <p style={{fontFamily:'Roboto,sans-serif',fontSize:12,color:'var(--ds-ink-30)',margin:'4px 0 0',fontStyle:'italic'}}>All timelines subject to refinement based on scope, complexity, and readiness.</p>
+            </div>
+          </div>
+
+          {/* ── Open-ended CTA ── */}
+          <Reveal style={{marginTop:56}}>
+            <div style={{
+              background:'var(--ds-fog)', borderRadius:18,
+              padding:'36px 40px', display:'flex',
+              alignItems:'center', justifyContent:'space-between',
+              gap:32, flexWrap:'wrap',
+              border:'1px solid var(--ds-ink-06)',
+            }}>
+              <div style={{flex:1, minWidth:260}}>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.18em',textTransform:'uppercase',color:'var(--ds-green)',marginBottom:10,display:'flex',alignItems:'center',gap:8}}>
+                  <span style={{width:18,height:1.5,background:'var(--ds-green)',display:'inline-block'}}/>Something else in mind?
+                </div>
+                <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(20px,2vw,26px)',lineHeight:1.2,letterSpacing:'-.01em',color:'var(--ds-ink)',margin:'0 0 10px',textWrap:'balance'}}>
+                  Building something that doesn't fit a template?
+                </h3>
+                <p style={{fontFamily:'Roboto,sans-serif',fontSize:15,lineHeight:1.6,color:'var(--ds-ink-60)',margin:0,maxWidth:560,textWrap:'pretty'}}>
+                  Most of our best engagements start with a conversation, not a spec. Tell us what you're trying to build and we'll figure out the right approach together and get it done.
+                </p>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:10,flexShrink:0}}>
+                <Pill variant="solid-green" size="md" href="mailto:contact@devsavant.com?subject=Custom Build Enquiry" arrow>Tell us what you need</Pill>
+                <Pill variant="outline-green" size="md" href="#contact">Book a discovery call</Pill>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    </>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  SERVICE 02 — OPERATE
+// ══════════════════════════════════════════════════════════════════════════════
+
+function OperateService() {
+  const [heartInView, setHeartInView] = useState(false);
+  const heartRef = useRef(null);
+  useEffect(()=>{
+    const el=heartRef.current; if(!el) return;
+    const ob=new IntersectionObserver(([e])=>{if(e.isIntersecting){setHeartInView(true);ob.disconnect();}},{threshold:0.15});
+    ob.observe(el); return()=>ob.disconnect();
+  },[]);
+
+  return (
+    <>
+      <ServiceChapter
+        id="operate"
+        num="02"
+        verb="Operate"
+        name="AI Consultancy & Managed Agents"
+        tagline="We advise, build, and run AI agents connected to your real systems, with a knowledge graph, a heartbeat, and a full operations layer underneath."
+        chips={[
+          { label:'The Company Brain', href:'#operate-brain' },
+          { label:'Why managed', href:'#operate-why' },
+          { label:'How it works', href:'#operate-how' },
+        ]}
+      />
+      {/* ── Intro — white ── */}
+      <div style={{background:'#fff',padding:'80px 0 80px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container>
+          <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,1.15fr) minmax(0,.85fr)',gap:56,alignItems:'start'}}>
+            <Reveal>
+              <h2 style={{...H2,maxWidth:560}}>Your teams run on AI. <span style={{color:'var(--ds-green)'}}>Nobody is running the agents.</span></h2>
+              <p style={{...BodyLg,fontSize:19,margin:'24px 0 0',maxWidth:600}}>Spinning up an AI agent is easy. Keeping one reliable (connected, monitored, recovered when something breaks, and current in a field that changes every week) is a full-time discipline. We built the operations layer so you don't have to.</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <div style={{padding:'28px 30px',background:'#fff',borderRadius:18,border:'1px solid var(--ds-ink-06)',boxShadow:'0 8px 24px rgba(13,68,42,.10)'}}>
+                <p style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(18px,2.1vw,23px)',lineHeight:1.3,letterSpacing:'-.01em',margin:0,color:'var(--ds-forest)',textWrap:'balance'}}>
+                  Most companies don't fail at building AI agents.<br/>They fail at <em style={{fontStyle:'normal',color:'var(--ds-green)'}}>running</em> them.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </div>
+
+      {/* ── The Company Brain — fog ── */}
+      <section id="operate-brain" style={{background:'var(--ds-fog)',padding:'96px 0 100px'}}>
+        <Container>
+          <Reveal><Overline>A Company Brain</Overline>
+            <h2 style={{...H2,maxWidth:880}}>Built on a graph of how your business actually works.</h2>
+            <p style={{...BodyLg,maxWidth:760,margin:'20px 0 44px'}}>Most AI tools retrieve isolated pieces of information. We model the relationships between everything that matters (people, systems, decisions, history) and the agent reasons across all of it.</p>
+          </Reveal>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:18,marginBottom:18}}>
+            {[
+              { n:'01', title:'It acts.',       body:'Give it an outcome, not a prompt. It researches, drafts, updates your systems, sends the message, and files the ticket across multiple tools in one run, then reports back when it\'s done.',      icon:<><circle cx="6" cy="12" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><path d="M8.2 12H13M13 12L18 7M13 12L18 12M13 12L18 17" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round"/><circle cx="19" cy="7" r="1.5" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6"/><circle cx="19.5" cy="12" r="1.5" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6"/><circle cx="19" cy="17" r="1.5" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6"/></> },
+              { n:'02', title:'It remembers.',  body:'A persistent knowledge graph of your business: your clients, your projects, your decisions. Not a forgetful chat thread that resets every session.',                                                icon:<><circle cx="12" cy="6" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="6" cy="14" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="18" cy="14" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="19" r="1.8" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6"/><path d="M11 7.6L7 12.5M13 7.6L17 12.5M7.4 15.6L11 17.7M16.6 15.6L13 17.7M8 14H16" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round"/></> },
+              { n:'03', title:'It understands.', body:'The graph maps how people, teams, systems, documents, and decisions connect, so the agent reasons across your business, not across isolated snippets.',                                      icon:<><circle cx="12" cy="5" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="5" cy="18" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="19" cy="18" r="2.2" fill="none" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="13" r="1.8" fill="var(--ds-green)" stroke="var(--ds-forest)" strokeWidth="1.3"/><path d="M12 7.2V11.2M10.6 14.5L6.6 16.4M13.4 14.5L17.4 16.4" stroke="var(--ds-forest)" strokeWidth="1.6" strokeLinecap="round"/></> },
+            ].map((p,i)=>(
+              <Reveal key={p.n} delay={i*80}>
+                <div style={{background:'#fff',borderRadius:18,padding:'32px 28px 30px',boxShadow:'0 8px 24px rgba(13,68,42,.08)'}}>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:22}}>
+                    <span style={{width:44,height:44,borderRadius:12,background:'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center'}}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">{p.icon}</svg></span>
+                    <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.16em',color:'var(--ds-green)'}}>{p.n}</span>
+                  </div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:26,lineHeight:1.15,letterSpacing:'-.01em',color:'var(--ds-ink)',margin:'0 0 10px'}}>{p.title}</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:14.5,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,textWrap:'pretty'}}>{p.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Headless callout */}
+          <Reveal>
+            <div style={{background:'#fff',borderRadius:14,border:'1px solid var(--ds-ink-06)',padding:'20px 28px',marginBottom:18,display:'flex',gap:16,alignItems:'flex-start',boxShadow:'0 2px 10px rgba(13,68,42,.04)'}}>
+              <span style={{width:38,height:38,borderRadius:10,flexShrink:0,background:'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center',marginTop:2}}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="6" rx="2" stroke="var(--ds-forest)" strokeWidth="1.5" strokeLinejoin="round"/><rect x="3" y="14" width="18" height="6" rx="2" stroke="var(--ds-forest)" strokeWidth="1.5" strokeLinejoin="round"/><circle cx="7" cy="7" r="1" fill="var(--ds-green)"/><circle cx="7" cy="17" r="1" fill="var(--ds-green)"/></svg>
+              </span>
+              <div>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:15,color:'var(--ds-ink)',marginBottom:4}}>Headless by design.</div>
+                <p style={{fontFamily:'Roboto,sans-serif',fontSize:14,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,textWrap:'pretty'}}>The agent runs as a managed service on a dedicated backend, handling routing, tool calls, integrations, and scheduled jobs. The default surface is Slack and Teams, because that's where decisions actually get made.</p>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Heartbeat callout */}
+          <Reveal>
+            <div ref={heartRef} className="heartbeat-callout" style={{position:'relative',borderRadius:22,padding:'40px 44px',background:'radial-gradient(120% 240% at 0% 0%,#1A6B40 0%,#0D442A 60%,#082B1B 100%)',color:'#fff',overflow:'hidden',boxShadow:'0 24px 60px rgba(13,68,42,.30)'}}>
+              <div aria-hidden="true" style={{position:'absolute',right:-40,top:-40,opacity:.12,pointerEvents:'none'}}><Isotype size={220} color="#fff"/></div>
+              <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,1.4fr) minmax(0,1fr)',gap:48,alignItems:'center',position:'relative'}}>
+                <div>
+                  <div style={{display:'inline-flex',alignItems:'center',gap:10,padding:'6px 12px 6px 8px',borderRadius:999,background:'rgba(255,255,255,.10)',marginBottom:16,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.16em',textTransform:'uppercase',color:'#A8E0C0'}}>
+                    <span style={{position:'relative',width:10,height:10,display:'inline-block'}}><span className="hb-ring-1" style={{position:'absolute',inset:0,borderRadius:'50%',background:'rgba(168,224,192,.35)'}}/><span style={{position:'absolute',inset:0,borderRadius:'50%',background:'#A8E0C0',display:'block'}}/></span>
+                    And the part most products skip
+                  </div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(36px,4vw,52px)',lineHeight:1.1,letterSpacing:'-.02em',margin:'0 0 14px',color:'#fff'}}>It works on its own.</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:16,lineHeight:1.6,color:'rgba(255,255,255,.86)',margin:0,maxWidth:580,textWrap:'pretty'}}>
+                    Your agent has a <strong style={{color:'#A8E0C0',fontWeight:600}}>heartbeat</strong>. On a regular schedule it wakes up, checks what's happening (your inbox, your pipeline, what's overdue), and takes action. It messages <em>you</em>. You don't have to message it.
+                  </p>
+                </div>
+                <div style={{background:'rgba(255,255,255,.06)',border:'1px solid rgba(255,255,255,.10)',borderRadius:16,padding:'18px 18px',backdropFilter:'blur(4px)'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(255,255,255,.72)'}}>
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.4" stroke="rgba(255,255,255,.6)" strokeWidth="1.3"/><path d="M8 4.5V8L10.5 9.5" stroke="rgba(255,255,255,.85)" strokeWidth="1.3" strokeLinecap="round"/></svg>
+                    Agent heartbeat: today
+                  </div>
+                  {[
+                    { t:'08:00', label:'Scan overnight email', done:true },
+                    { t:'08:30', label:'Surface blockers for stand-up', done:true },
+                    { t:'11:00', label:'Check renewal pipeline', done:true, hi:true },
+                    { t:'14:00', label:'Draft EOD summary', done:false },
+                    { t:'17:30', label:'Send daily report', done:false },
+                  ].map((b,i)=>(
+                    <div key={i} style={{display:'grid',gridTemplateColumns:'52px 1fr auto',gap:12,alignItems:'center',padding:'8px 10px',borderRadius:10,background:b.hi?'rgba(168,224,192,.10)':'transparent',border:b.hi?'1px solid rgba(168,224,192,.30)':'1px solid transparent',marginBottom:i<4?6:0}}>
+                      <span style={{fontFamily:'ui-monospace,monospace',fontSize:11,color:'rgba(255,255,255,.7)',letterSpacing:'.04em'}}>{b.t}</span>
+                      <span style={{fontFamily:'Roboto,sans-serif',fontSize:13,color:'rgba(255,255,255,.92)'}}>{b.label}</span>
+                      <span>{b.done?<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6.4" fill="rgba(168,224,192,.20)" stroke="#A8E0C0" strokeWidth="1.2"/><path d="M4 7.3L6.2 9.4L10 5.4" stroke="#A8E0C0" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>:<span style={{width:8,height:8,borderRadius:'50%',background:'rgba(255,255,255,.25)',display:'inline-block'}}/>}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/* ── Why managed — dark band ── */}
+      <section id="operate-why" style={{background:'linear-gradient(180deg,#0E2B1C 0%,#082B1B 100%)',color:'#fff',padding:'96px 0 100px',position:'relative',overflow:'hidden'}}>
+        <svg aria-hidden="true" style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.22}}>
+          <defs><pattern id="op-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="rgba(168,224,192,.18)" strokeWidth="1" fill="none"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#op-grid)"/>
+        </svg>
+        <Container style={{position:'relative'}}>
+          <div className="mobile-stack dark-section-intro" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)',gap:56,alignItems:'start',marginBottom:52}}>
+            <Reveal><Overline color="#A8E0C0">Why managed</Overline>
+              <h2 style={{...H2,color:'#fff',marginTop:8}}>You don't need an AI Ops team. <span style={{color:'#A8E0C0'}}>You have us.</span></h2>
+            </Reveal>
+            <Reveal delay={100} className="dark-section-intro-body" style={{paddingTop:42}}>
+              <p style={{...BodyLg,color:'rgba(255,255,255,.86)',margin:0}}>Companies are now hiring "AI Ops" engineers just to keep their agents alive. We built the operations layer so you don't have to. It's the part you can't buy off a shelf, and shouldn't have to staff.</p>
+            </Reveal>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:1,background:'rgba(168,224,192,.18)',borderRadius:16,overflow:'hidden',border:'1px solid rgba(168,224,192,.18)'}} className="op-grid">
+            {[
+              { icon:'monitor',  t:'Monitored 24/7',   d:'Continuous health checks, latency tracking, and error monitoring. We see issues before you do.' },
+              { icon:'recover',  t:'Auto-recovery',     d:'When something breaks, the system rolls back, retries, and escalates to a human if needed.' },
+              { icon:'update',   t:'Tested upgrades',   d:'Versioned components, gated upgrades, drift detection. New models ship on a controlled release path.' },
+              { icon:'shield',   t:'Secured in depth',  d:'Five-layer security architecture: edge, transport, role-based access, strict command policy, locked-down extensions.' },
+            ].map((it,i)=>(
+              <Reveal key={it.t} delay={i*70}>
+                <div style={{background:'rgba(13,68,42,.55)',padding:'28px 26px',backdropFilter:'blur(4px)'}}>
+                  <span style={{width:44,height:44,borderRadius:10,background:'rgba(168,224,192,.14)',border:'1px solid rgba(168,224,192,.30)',display:'inline-flex',alignItems:'center',justifyContent:'center'}}><Ico name={it.icon} size={22} color="#A8E0C0" sw={1.6}/></span>
+                  <div style={{marginTop:18,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:18,letterSpacing:'-.005em',color:'#fff'}}>{it.t}</div>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.55,color:'rgba(255,255,255,.78)',margin:'8px 0 0'}}>{it.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── How it works — white ── */}
+      <section id="operate-how" style={{background:'#fff',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container>
+          <Reveal style={{textAlign:'center',marginBottom:60}}><Overline>How it works</Overline>
+            <h2 style={{...H2,maxWidth:820,margin:'8px auto 0'}}>Three steps to a working digital worker.</h2>
+          </Reveal>
+          <div style={{position:'relative'}}>
+            <div aria-hidden="true" className="how-line" style={{position:'absolute',top:38,left:'8%',right:'8%',height:2,background:'repeating-linear-gradient(to right,var(--ds-green-30) 0 6px,transparent 6px 12px)',zIndex:0}}/>
+            <div style={{position:'relative',zIndex:1,display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:28}}>
+              {[
+                { n:'01', title:'Try it.',      tag:'Free',      body:'Talk to a live demo agent and see what a managed agent actually does before you decide anything.' },
+                { n:'02', title:'Run a pilot.', tag:'2 weeks',   body:'We build an agent for your real use case and deploy it. Focused, two-week build. If you continue, your pilot fee is credited to your first month.' },
+                { n:'03', title:'Go managed.',  tag:'Ongoing',   body:'Convert to a managed subscription. We run, monitor, update, and grow your agent. New capability needed? Just ask.' },
+              ].map((s,i)=>(
+                <Reveal key={s.n} delay={i*120}>
+                  <div style={{width:76,height:76,borderRadius:'50%',background:'#fff',border:'2px solid var(--ds-green)',color:'var(--ds-forest)',display:'inline-flex',alignItems:'center',justifyContent:'center',fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:22,boxShadow:'0 6px 18px rgba(13,68,42,.10)',marginBottom:18}}>{s.n}</div>
+                  <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
+                    <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:26,letterSpacing:'-.01em',lineHeight:1.15,color:'var(--ds-ink)',margin:0}}>{s.title}</h3>
+                    <span style={{fontFamily:'Mulish,sans-serif',fontWeight:600,fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ds-green)',padding:'4px 10px',borderRadius:999,background:'var(--ds-green-12)',whiteSpace:'nowrap'}}>{s.tag}</span>
+                  </div>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:15,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,maxWidth:360,textWrap:'pretty'}}>{s.body}</p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  SERVICE 03 — GOVERN
+// ══════════════════════════════════════════════════════════════════════════════
+
+function GovernService() {
+  return (
+    <>
+      <ServiceChapter
+        id="govern"
+        num="03"
+        verb="Govern"
+        name="AI Governance as a Service"
+        tagline="One operating model to catalog, review, secure, and measure every AI asset your teams create, from first draft to live production."
+        chips={[
+          { label:'Five pillars', href:'#pillars' },
+          { label:'Governance layer', href:'#govern-layer' },
+          { label:'KPI dashboard', href:'#govern-kpi' },
+          { label:'Use cases', href:'#govern-usecases' },
+        ]}
+      />
+      {/* ── Intro — fog ── */}
+      <div style={{background:'var(--ds-fog)',padding:'80px 0 80px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container>
+          <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,1.15fr) minmax(0,.85fr)',gap:56,alignItems:'start'}}>
+            <Reveal>
+              <h2 style={{...H2,maxWidth:560}}>Your teams already build with AI. <span style={{color:'var(--ds-green)'}}>Nobody is governing it.</span></h2>
+              <p style={{...BodyLg,fontSize:19,margin:'24px 0 0',maxWidth:600}}>Most of it is invisible: no owner, no review process, no audit trail, no measurement. When something breaks or someone leaves, no one knows what runs, what it touches, or whether it still should.</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <div style={{padding:'28px 30px',background:'var(--ds-forest)',borderRadius:18,color:'#fff',boxShadow:'0 18px 44px rgba(13,68,42,.22)',position:'relative',overflow:'hidden'}}>
+                <div aria-hidden="true" style={{position:'absolute',right:-30,top:-30,opacity:.1}}><Isotype size={140} color="#fff"/></div>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.18em',textTransform:'uppercase',color:'#A8E0C0',marginBottom:14}}>The real risk</div>
+                <p style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(18px,2.1vw,23px)',lineHeight:1.3,letterSpacing:'-.01em',margin:0,color:'#fff',textWrap:'balance',position:'relative'}}>
+                  It's not that your teams are building with AI. It's that they're building <span style={{color:'#A8E0C0'}}>without governance</span>. That gap widens every week.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </div>
+
+      {/* ── Five Pillars — fog ── */}
+      <section id="pillars" style={{background:'var(--ds-fog)',padding:'96px 0 100px'}}>
+        <Container>
+          <Reveal><Overline>The operating model</Overline>
+            <h2 style={{...H2,maxWidth:780}}>Five pillars. <span style={{color:'var(--ds-ink-60)',fontWeight:400}}>One governed path to production.</span></h2>
+            <p style={{...BodyLg,maxWidth:720,margin:'20px 0 0'}}>Everything a company needs to govern AI assets from creation to production: security, training, review, catalog, and measurement, in a single connected system.</p>
+          </Reveal>
+          <div className="pillar-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginTop:44}}>
+            {[
+              { ico:'catalog', n:'01', name:'Approved Asset Catalog',      desc:'A central registry of every AI asset: owner, purpose, systems touched, credential dependencies, review status. Nothing reaches production without a catalog entry.' },
+              { ico:'check',   n:'02', name:'Review & Publish Workflow',   desc:'Draft, review, approval, and activation are separate stages. AI-generated work does not become production work by default. Every asset moves through documented human review.' },
+              { ico:'shield',  n:'03', name:'Security & Credential Layer', desc:'Every asset that touches a system must declare the connection, access level, and credential source. Access is logged, auditable, and revokable.' },
+              { ico:'grad',    n:'04', name:'Training & Enablement Portal', desc:'Before building, employees complete training for the tools they want to use. The portal surfaces approved tools, usage guidelines, creation templates, and the intake path.' },
+              { ico:'chart',   n:'05', name:'KPI Dashboard',               desc:'Real-time visibility into AI adoption and impact: hours saved, active assets, department distribution, asset maturity, run counts, failure rates, and ROI by business unit.' },
+            ].map((p,i)=>(
+              <Reveal key={p.name} delay={i*80}>
+                <div style={{background:'#fff',borderRadius:18,padding:'28px 26px 26px',height:'100%',boxShadow:'0 8px 24px rgba(13,68,42,.08)',transition:'transform 220ms cubic-bezier(.2,.7,.1,1),box-shadow 220ms'}} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 20px 48px rgba(13,68,42,.14)';}} onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 8px 24px rgba(13,68,42,.08)';}}>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
+                    <span style={{width:46,height:46,borderRadius:12,background:'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center'}}><Ico name={p.ico}/></span>
+                    <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.14em',color:'var(--ds-green)'}}>{p.n}</span>
+                  </div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:19,lineHeight:1.2,letterSpacing:'-.01em',color:'var(--ds-ink)',margin:'0 0 10px'}}>{p.name}</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:14,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0,textWrap:'pretty'}}>{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+            <Reveal delay={5*80} style={{display:'flex'}}>
+              <div style={{flex:1,borderRadius:18,padding:'28px 28px',background:'linear-gradient(135deg,#51AE7B 0%,#0D442A 100%)',color:'#fff',display:'flex',flexDirection:'column',justifyContent:'space-between',minHeight:180,boxShadow:'0 14px 36px rgba(13,68,42,.20)'}}>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:20,lineHeight:1.2,letterSpacing:'-.01em',textWrap:'balance'}}>One connected system: from first draft to live ROI.</div>
+                <a href="#contact" style={{display:'inline-flex',alignItems:'center',gap:8,marginTop:18,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:14,color:'#fff',textDecoration:'none',borderBottom:'none'}}>
+                  Book a pilot <Ico name="arrow" size={16} color="#fff" sw={2}/>
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Governance layer — deep dark ── */}
+      <section id="govern-layer" style={{background:'linear-gradient(180deg,#0E2B1C 0%,#082B1B 100%)',color:'#fff',padding:'96px 0 100px',position:'relative',overflow:'hidden'}}>
+        <svg aria-hidden="true" style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.18}}>
+          <defs><pattern id="gov-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="rgba(168,224,192,.18)" strokeWidth="1" fill="none"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#gov-grid)"/>
+        </svg>
+        <Container style={{position:'relative'}}>
+          <div className="mobile-stack dark-section-intro" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)',gap:56,alignItems:'start',marginBottom:52}}>
+            <Reveal><Overline color="#A8E0C0">The governance layer</Overline>
+              <h2 style={{...H2,color:'#fff',marginTop:8,maxWidth:720}}>Roles, rules, and permissions:<br/><span style={{color:'#A8E0C0'}}>defined once, enforced everywhere.</span></h2>
+            </Reveal>
+            <Reveal delay={100} className="dark-section-intro-body" style={{paddingTop:42}}>
+              <p style={{...BodyLg,color:'rgba(255,255,255,.86)',margin:0,maxWidth:700}}>A catalog and a review queue only work if everyone knows the rules and who is accountable. The governance layer makes the human structure explicit: who may build, who reviews, who approves, and exactly what each role is allowed to do.</p>
+              <p style={{...BodyLg,color:'rgba(255,255,255,.86)',margin:'16px 0 0',maxWidth:700}}>It is the connective tissue behind every other pillar, and the part most AI rollouts skip.</p>
+            </Reveal>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:1,background:'rgba(168,224,192,.18)',borderRadius:16,overflow:'hidden',border:'1px solid rgba(168,224,192,.18)',marginBottom:22}} className="gov-card-grid">
+            {[
+              { ico:'doc',   t:'Code of Conduct',         d:'Created, versioned, and distributed. Every team member knows what AI use is permitted, encouraged, or prohibited, in writing, not by assumption.' },
+              { ico:'users', t:'Role monitoring',         d:'Owners, reviewers, and approvers are assigned per asset. All activity is logged against a named role, so accountability is never ambiguous.' },
+              { ico:'lock',  t:'Permissions',             d:'Access is scoped by role. No blanket credentials. Permissions are explicit, auditable, and revocable at any time, down to the individual asset.' },
+              { ico:'ban',   t:'Allowed & forbidden actions', d:'Clear guardrails for every approved AI tool. Boundaries are defined once and enforced consistently across all teams.' },
+            ].map((c,i)=>(
+              <Reveal key={c.t} delay={i*70}>
+                <div style={{background:'rgba(13,68,42,.55)',padding:'26px 24px',backdropFilter:'blur(4px)'}}>
+                  <span style={{width:44,height:44,borderRadius:10,background:'rgba(168,224,192,.14)',border:'1px solid rgba(168,224,192,.30)',display:'inline-flex',alignItems:'center',justifyContent:'center'}}><Ico name={c.ico} size={21} color="#A8E0C0"/></span>
+                  <div style={{marginTop:16,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:17,color:'#fff',letterSpacing:'-.005em'}}>{c.t}</div>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.55,color:'rgba(255,255,255,.78)',margin:'8px 0 0',textWrap:'pretty'}}>{c.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── KPI Dashboard — white ── */}
+      <section id="govern-kpi" style={{background:'#fff',padding:'96px 0 100px'}}>
+        <Container>
+          <Reveal>
+            <div style={{textAlign:'center',maxWidth:760,margin:'0 auto'}}>
+              <div style={{display:'inline-flex'}}><Overline>KPI Dashboard</Overline></div>
+              <h2 style={{...H2,margin:'0 auto'}}>Measure the actual impact of your AI investment.</h2>
+              <p style={{...BodyLg,margin:'20px auto 0'}}>Every approved asset captures a baseline at intake and reports against it in production. Leadership gets a live view of what AI is doing for the business, in hours saved, adoption rates, and ROI per unit.</p>
+            </div>
+          </Reveal>
+          <div className="kpi-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginTop:48}}>
+            {[
+              { label:'Productivity', t:'Hours saved per week',      d:'Actual time recovered by department, compared to the manual baseline captured at asset intake.' },
+              { label:'Portfolio',    t:'Active AI assets',           d:'Total approved assets in production, broken down by type, department, and current review status.' },
+              { label:'Quality',      t:'Asset maturity score',       d:'Composite score measuring documentation quality, review depth, test coverage, and operational history.' },
+              { label:'Reliability',  t:'Run counts & failure rate',  d:'How often each asset runs, how often it fails, and whether failures are escalating or stable over time.' },
+              { label:'Adoption',     t:'Department distribution',    d:'Which teams are creating and using AI assets, and which are lagging. Informs enablement priorities.' },
+              { label:'Return',       t:'ROI by business unit',       d:'Estimated return based on hours saved, error reduction, and process cycle-time improvement per asset.' },
+            ].map((k,i)=>(
+              <Reveal key={k.t} delay={(i%3)*80}>
+                <div style={{background:'#fff',border:'1px solid var(--ds-ink-06)',borderRadius:16,padding:'24px 24px 22px',height:'100%',boxShadow:'0 6px 20px rgba(13,68,42,.05)'}}>
+                  <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ds-green)',marginBottom:12}}>{k.label}</div>
+                  <h3 style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:18,lineHeight:1.25,color:'var(--ds-ink)',margin:'0 0 8px',letterSpacing:'-.01em'}}>{k.t}</h3>
+                  <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.6,color:'var(--ds-ink-60)',margin:0,textWrap:'pretty'}}>{k.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Use cases ── */}
+      <section id="govern-usecases" style={{background:'var(--ds-fog)',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+        <Container>
+          <Reveal><Overline>Use cases</Overline><h2 style={{...H2,maxWidth:720}}>What this looks like in practice.</h2></Reveal>
+          <Reveal>
+            <div style={{marginTop:40,borderRadius:18,overflow:'hidden',border:'1px solid var(--ds-ink-06)',boxShadow:'0 12px 36px rgba(13,68,42,.08)'}} className="mobile-scroll">
+              <div className="uc-inner" style={{minWidth:720}}>
+                <div className="uc-row" style={{display:'grid',gridTemplateColumns:'1.1fr 1.45fr 1.45fr',background:'#fff'}}>
+                  <div className="uc-scenario-col" style={{padding:'16px 22px',fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--ds-ink-60)',borderBottom:'1px solid var(--ds-ink-06)'}}>Scenario</div>
+                  <div style={{padding:'16px 22px',fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.06em',textTransform:'uppercase',color:'#A8431F',background:'#FDF5F3',borderBottom:'1px solid var(--ds-ink-06)',borderLeft:'1px solid var(--ds-ink-06)',display:'flex',alignItems:'center',gap:8}}><Ico name="ban" size={15} color="#A8431F"/> Without governance</div>
+                  <div style={{padding:'16px 22px',fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.06em',textTransform:'uppercase',color:'var(--ds-forest)',background:'linear-gradient(180deg,#ECF7F0,#DFEFE6)',borderBottom:'1px solid var(--ds-ink-06)',borderLeft:'1px solid var(--ds-ink-06)',display:'flex',alignItems:'center',gap:8}}><Ico name="check" size={15} color="var(--ds-forest)"/> With AI Governance</div>
+                </div>
+                {[
+                  { s:'Operations builds a Slack automation',     wo:"Lives on one person's account. No documentation. Breaks silently when they leave.",              w:'Documented, reviewed, team-owned, auditable, and tracked against a time-saved baseline.' },
+                  { s:'Marketing creates AI-generated content',   wo:'Unknown tools, inconsistent brand, no review process, no accountability for output quality.',  w:'Approved tools, brand-reviewed, deployed through a controlled and auditable path.' },
+                  { s:'HR generates policy docs with AI',         wo:"Stored in personal drives. No version history. No review record. No owner.",                     w:'Cataloged, reviewed by the right stakeholder, version-controlled, and searchable.' },
+                  { s:'Engineering shares a reusable AI skill',   wo:'Shared via DM. No versioning, no approval, no visibility beyond the original thread.',          w:'Submitted to the catalog, reviewed, versioned, and distributed through approved channels.' },
+                  { s:"Leadership asks what AI is doing for us",  wo:'No answer. No data. Anecdotes only.',                                                            w:'KPI dashboard shows hours saved, active assets, adoption by department, and ROI.' },
+                ].map((r,i)=>(
+                  <div key={i} className="uc-row" style={{display:'grid',gridTemplateColumns:'1.1fr 1.45fr 1.45fr'}}>
+                    <div className="uc-scenario-col" style={{padding:'18px 22px',fontFamily:'Mulish,sans-serif',fontWeight:600,fontSize:14,color:'var(--ds-ink)',borderTop:'1px solid var(--ds-ink-06)',display:'flex',alignItems:'center',background:'#fff'}}>{r.s}</div>
+                    <div style={{padding:'18px 22px',fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.5,color:'var(--ds-ink-90)',borderTop:'1px solid var(--ds-ink-06)',borderLeft:'1px solid var(--ds-ink-06)',background:'#FDF8F6'}}>{r.wo}</div>
+                    <div style={{padding:'18px 22px',fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.5,color:'var(--ds-ink)',borderTop:'1px solid var(--ds-ink-06)',borderLeft:'1px solid var(--ds-ink-06)',background:'#EEF8F3'}}>{r.w}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    </>
+  );
+}
+
+// ── Why DevSavant ─────────────────────────────────────────────────────────────
+function WhyDevSavant() {
+  return (
+    <section id="why" style={{background:'#fff',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+      <Container max={1080}>
+        <Reveal style={{textAlign:'center',marginBottom:18}}><Overline>Why DevSavant</Overline></Reveal>
+        <Reveal>
+          <h2 style={{...H2,textAlign:'center',maxWidth:880,margin:'0 auto 28px'}}>We don't just build products. <span style={{color:'var(--ds-green)'}}>We run and govern them.</span></h2>
+          <p style={{...BodyLg,textAlign:'center',maxWidth:760,margin:'0 auto 56px'}}>We've operated software, agents, and governance models in production for funded startups and growth-stage companies. We built the proprietary ops layer that makes "managed" mean something. It's the part you can't buy off a shelf and shouldn't have to build.</p>
+        </Reveal>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:18,marginBottom:44,alignItems:'stretch'}}>
+          {[
+            { k:'Production since',  v:'Early 2026',    d:'Running agents, platforms, and governance models in live production, including our own business.' },
+            { k:'We built',          v:'The ops layer', d:'Versioned components, automated drift detection, gated upgrades. No guesswork.' },
+            { k:'Senior talent in',  v:'LATAM + Asia',  d:'Through Savant Growth: vetted, senior engineers and product leads. No juniors on critical work.' },
+            { k:'Part of',           v:'Savant Growth', d:'A boutique product-engineering ecosystem. From build to operations to governance.' },
+          ].map((c,i)=>(
+            <Reveal key={c.k} delay={i*70} style={{display:'flex'}}>
+              <div style={{flex:1,background:'#fff',border:'1px solid var(--ds-ink-06)',borderRadius:14,padding:'20px 22px'}}>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:600,fontSize:11,letterSpacing:'.18em',textTransform:'uppercase',color:'var(--ds-ink-60)',marginBottom:6}}>{c.k}</div>
+                <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:22,letterSpacing:'-.01em',color:'var(--ds-forest)',lineHeight:1.1}}>{c.v}</div>
+                <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.5,color:'var(--ds-ink-60)',margin:'8px 0 0'}}>{c.d}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal>
+          <div style={{background:'var(--ds-fog)',borderRadius:18,padding:'32px 32px',textAlign:'center',maxWidth:760,margin:'0 auto'}}>
+            <p style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:'clamp(20px,1.8vw,24px)',lineHeight:1.3,letterSpacing:'-.01em',color:'var(--ds-forest)',margin:0,textWrap:'balance'}}>
+              You're not buying a vendor. You're buying the team and the system that keep it excellent across every phase.
+            </p>
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+function FAQ() {
+  const items = [
+    { q:"We already have a dev agency. Why do we need you?", a:"Most dev agencies build and disappear. We stay, operating the agents we build, governing the AI assets we create, and expanding the scope as you grow. We carry context across build, operate, and govern so nothing gets lost in handoffs." },
+    { q:"How quickly can we get something working?", a:"A focused proof of concept in 1–4 weeks. A working managed agent in two weeks. A piloted governance model in under a month. We design every engagement to produce something measurable, fast, so you see value before you commit to the next phase." },
+    { q:"What if we just want to build a product, not agents?", a:"That's Service 01: AI & Product Engineering. You don't have to take all three services. We scope every engagement independently, and you decide what's next after you've seen results." },
+    { q:"Can you govern AI tools we've already built without you?", a:"Yes. The governance model is tool-agnostic. We start by cataloging what exists, then design the review path and measurement model. Existing assets go through the same intake as new ones." },
+    { q:"What does 'managed agent' actually mean in practice?", a:"It means we built it, we host it, we monitor it 24/7, we recover it when something breaks, and we deliver gated upgrades when new models or capabilities become available. You interact with the agent in Slack or Teams. We handle everything underneath." },
+    { q:"How do you handle data privacy and client isolation?", a:"Every engagement (whether build, operate, or govern) runs in an isolated environment. Your data never touches another client's infrastructure. Built on open-source OpenClaw, so you're never locked in. Data is exportable on request." },
+    { q:"Do we have to do all three services?", a:"No. Each service is independent. Most clients start with one: a focused build, a two-week managed agent pilot, or a governance pilot around one asset, and expand from there. You choose the pace. We earn each next phase." },
+  ];
+  const [open, setOpen] = useState(0);
+  return (
+    <section id="faq" style={{background:'#fff',padding:'96px 0 100px',borderBottom:'1px solid var(--ds-ink-06)'}}>
+      <Container max={1180}>
+        <div className="mobile-stack" style={{display:'grid',gridTemplateColumns:'minmax(0,1.1fr) minmax(0,2.4fr)',gap:64,alignItems:'start'}}>
+          <div className="faq-sticky" style={{position:'sticky',top:100}}>
+            <Overline>FAQ</Overline>
+            <h2 style={{...H2,marginTop:8}}>The questions founders and leaders ask.</h2>
+            <p style={{...BodyLg,margin:'20px 0 0'}}>Direct answers from the people who design and run the engagements.</p>
+          </div>
+          <div style={{background:'#fff',borderRadius:18,border:'1px solid var(--ds-ink-06)',overflow:'hidden',boxShadow:'0 8px 24px rgba(13,68,42,.06)'}}>
+            {items.map((it,i)=>(
+              <div key={i} className={open===i?'faq-open':''} style={{borderTop:i===0?'none':'1px solid var(--ds-ink-06)'}}>
+                <button onClick={()=>setOpen(open===i?-1:i)} style={{width:'100%',textAlign:'left',background:'transparent',border:'none',cursor:'pointer',padding:'22px 26px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:16}}>
+                  <span style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:17,color:'var(--ds-ink)',letterSpacing:'-.005em'}}>{it.q}</span>
+                  <span className="faq-chev" style={{width:28,height:28,borderRadius:'50%',background:open===i?'var(--ds-forest)':'var(--ds-green-12)',display:'inline-flex',alignItems:'center',justifyContent:'center',flexShrink:0,transition:'background 200ms'}}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke={open===i?'#fff':'var(--ds-forest)'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </span>
+                </button>
+                <div style={{maxHeight:open===i?320:0,overflow:'hidden',transition:'max-height 300ms cubic-bezier(.2,.7,.1,1)'}}>
+                  <div style={{padding:'0 26px 24px',maxWidth:680}}>
+                    <p style={{fontFamily:'Roboto,sans-serif',fontSize:15,lineHeight:1.6,color:'var(--ds-ink-90)',margin:0}}>{it.a}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+// ── Pilot CTA ─────────────────────────────────────────────────────────────────
+function PilotCTA() {
+  return (
+    <section id="contact" style={{background:'linear-gradient(180deg,#0E2B1C 0%,#051a10 100%)',color:'#fff',padding:'108px 0 116px',position:'relative',overflow:'hidden'}}>
+      <div aria-hidden="true" style={{position:'absolute',top:50,right:'7%',opacity:.12}}><Isotype size={150} color="#fff"/></div>
+      <svg aria-hidden="true" style={{position:'absolute',left:0,bottom:0,opacity:.22}} width="300" height="190" viewBox="0 0 300 190">
+        <defs><pattern id="cta-dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="rgba(168,224,192,.35)"/></pattern></defs>
+        <rect width="300" height="190" fill="url(#cta-dots)"/>
+      </svg>
+      <Container max={1000} style={{position:'relative'}}>
+        <div style={{textAlign:'center',maxWidth:760,margin:'0 auto'}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:10,padding:'6px 14px',borderRadius:999,background:'rgba(168,224,192,.10)',border:'1px solid rgba(168,224,192,.20)',marginBottom:22,fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:11,letterSpacing:'.18em',textTransform:'uppercase',color:'#A8E0C0'}}>
+            <span style={{width:7,height:7,borderRadius:999,background:'#A8E0C0'}}/> Start small, prove it fast
+          </div>
+          <h2 style={{...H2,color:'#fff',margin:'0 auto 16px'}}>
+            Start with one pilot.<br/><span style={{color:'#A8E0C0'}}>Prove the model. Then scale it.</span>
+          </h2>
+          <p style={{...BodyLg,color:'rgba(255,255,255,.8)',maxWidth:620,margin:'0 auto 12px'}}>
+            Whether you want to build a product, run an agent, or govern your AI assets. Every engagement starts with one focused pilot. You see results before you commit to the next step.
+          </p>
+        </div>
+        <div className="cta-steps" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:18,margin:'44px 0 40px'}}>
+          {[
+            { n:'1', t:'One conversation',  d:'We map your highest-leverage opportunity across build, operate, and govern, and design a focused starting point together.' },
+            { n:'2', t:'One pilot',         d:'A 1–4 week engagement that delivers something real and measurable on your actual data and operations.' },
+            { n:'3', t:'You decide',        d:"Expand to the next service, scale the pilot, or govern what you've already built. You own the pace." },
+          ].map(s=>(
+            <div key={s.n} style={{background:'rgba(255,255,255,.05)',border:'1px solid rgba(168,224,192,.18)',borderRadius:16,padding:'24px 24px 22px'}}>
+              <div style={{width:36,height:36,borderRadius:999,background:'rgba(168,224,192,.16)',border:'1px solid rgba(168,224,192,.4)',color:'#A8E0C0',display:'inline-flex',alignItems:'center',justifyContent:'center',fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:15,marginBottom:14}}>{s.n}</div>
+              <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:18,color:'#fff',marginBottom:6}}>{s.t}</div>
+              <p style={{fontFamily:'Roboto,sans-serif',fontSize:13.5,lineHeight:1.55,color:'rgba(255,255,255,.74)',margin:0}}>{s.d}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+          <Pill variant="solid-green" size="lg" href="mailto:contact@devsavant.com?subject=Discovery Session Request" arrow>Book a discovery session</Pill>
+          <Pill variant="outline-white" size="lg" href="https://devsavant.com">Visit devsavant.com</Pill>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+function Footer() {
+  const cols = [
+    { title:'Services',   links:[['AI & Product Engineering','#build'],['AI Consultancy & Managed Agents','#operate'],['AI Governance as a Service','#govern']] },
+    { title:'DevSavant',  links:[['Product Engineering','#services'],['Global Staffing','https://devsavant.com'],['VC Partnerships','https://devsavant.com'],['Careers','https://devsavant.com']] },
+    { title:'Company',    links:[['About','https://devsavant.com'],['Contact','#contact'],['Privacy Policy','https://devsavant.com'],['Terms','https://devsavant.com']] },
+  ];
+  return (
+    <footer style={{background:'var(--ds-ink)',color:'#fff',padding:'80px 0 40px'}}>
+      <Container max={1180}>
+        <div className="footer-grid" style={{display:'grid',gridTemplateColumns:'minmax(0,1.4fr) repeat(3,minmax(0,1fr))',gap:48,marginBottom:56}}>
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:18}}>
+              <img src="assets/logo-devsavant-isotype-color.png" alt="DevSavant" style={{height:28,width:'auto'}}/>
+              <span style={{fontFamily:'Mulish,sans-serif',fontWeight:900,letterSpacing:'.02em',color:'#fff',fontSize:15}}><span style={{fontWeight:900}}>DEV</span><span style={{fontWeight:500}}>SAVANT</span></span>
+            </div>
+            <p style={{fontFamily:'Roboto,sans-serif',fontSize:14,lineHeight:1.6,color:'rgba(255,255,255,.65)',margin:'0 0 22px',maxWidth:340}}>An embedded product team for funded startups and growth-stage companies. Build, operate, and govern. One partner, every phase.</p>
+            <Pill variant="outline-white" size="sm" href="#contact" arrow>Book a session</Pill>
+          </div>
+          {cols.map(c=>(
+            <div key={c.title}>
+              <div style={{fontFamily:'Mulish,sans-serif',fontWeight:700,fontSize:12,letterSpacing:'.14em',textTransform:'uppercase',color:'#A8E0C0',marginBottom:16}}>{c.title}</div>
+              <ul style={{listStyle:'none',padding:0,margin:0,display:'flex',flexDirection:'column',gap:10}}>
+                {c.links.map(([label,href])=>(
+                  <li key={label}><a href={href} style={{fontFamily:'Roboto,sans-serif',fontSize:14,color:'rgba(255,255,255,.75)',textDecoration:'none',borderBottom:'none',transition:'color 160ms'}} onMouseEnter={e=>e.currentTarget.style.color='#fff'} onMouseLeave={e=>e.currentTarget.style.color='rgba(255,255,255,.75)'}>{label}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:28,borderTop:'1px solid rgba(255,255,255,.10)',fontFamily:'Roboto,sans-serif',fontSize:12.5,color:'rgba(255,255,255,.55)',flexWrap:'wrap',gap:12}}>
+          <div>© {new Date().getFullYear()} DevSavant. All rights reserved.</div>
+          <div style={{display:'flex',gap:18,flexWrap:'wrap'}}>
+            <span>Build · Operate · Govern</span>
+            <span style={{opacity:.4}}>·</span>
+            <a href="mailto:contact@devsavant.com" style={{color:'rgba(255,255,255,.55)',textDecoration:'none',borderBottom:'none'}}>contact@devsavant.com</a>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────────────────
+function App() {
+  return (
+    <>
+      <Nav/>
+      <Hero/>
+      <FullSpectrum/>
+      <BuildService/>
+      <OperateService/>
+      <GovernService/>
+      <WhyDevSavant/>
+      <FAQ/>
+      <PilotCTA/>
+      <Footer/>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

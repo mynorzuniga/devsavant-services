@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AI Governance as a Service · DevSavant</title>
+<link rel="icon" href="assets/logo-devsavant-isotype-color.png"/>
+<link rel="stylesheet" href="colors_and_type.css"/>
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; color: var(--ds-ink); }
+  body {
+    font-family: 'Roboto', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  * { box-sizing: border-box; }
+  #root { min-height: 100vh; overflow-x: clip; }
+  a { color: inherit; }
+  ::selection { background: var(--ds-green-30); color: var(--ds-forest); }
+  html { scroll-behavior: smooth; }
+
+  /* ---- keyframes ---- */
+  @keyframes bar-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes width-grow { from { width: 0 !important; } }
+  @keyframes live-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .live-dot { animation: live-pulse 1.8s ease-in-out infinite; }
+
+
+
+  .faq-chev { transition: transform 200ms cubic-bezier(.2,.7,.1,1); }
+  .faq-open .faq-chev { transform: rotate(180deg); }
+
+  /* Nav: hide service sub-label on mobile to prevent hamburger overlap */
+  @media (max-width: 768px) {
+    .nav-service-label { display: none !important; }
+  }
+
+  /* nav visibility */
+  .nav-mobile { display: none !important; }
+  .nav-desktop { display: flex; }
+
+  /* ---- responsive ---- */
+  @media (max-width: 920px) {
+    .pillar-grid { grid-template-columns: 1fr 1fr !important; }
+    .gov-card-grid { grid-template-columns: 1fr 1fr !important; }
+    .train-grid { grid-template-columns: 1fr 1fr !important; row-gap: 36px !important; }
+    .train-line { display: none !important; }
+    .kpi-grid, .benefit-grid { grid-template-columns: 1fr 1fr !important; }
+    .cta-steps { grid-template-columns: 1fr !important; }
+    .footer-grid { grid-template-columns: 1fr 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .nav-mobile { display: flex !important; }
+    .nav-desktop { display: none !important; }
+    .mobile-stack { grid-template-columns: 1fr !important; gap: 36px !important; }
+    .mobile-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .security-grid { grid-template-columns: 1fr !important; }
+    .faq-sticky { position: static !important; }
+    section { padding-top: 64px !important; padding-bottom: 64px !important; }
+    .hero-section { padding-top: 100px !important; }
+    .hero-h1 { font-size: 32px !important; }
+    .hero-grid { margin-top: 24px !important; gap: 40px !important; }
+    .hero-dash-panel { transform: none !important; }
+    /* Governance: remove desktop alignment offset when stacked */
+    .gov-body-col { padding-top: 0 !important; }
+    /* Use-cases: hide "Scenario" column on mobile, show Without + With only */
+    .uc-scenario-col { display: none !important; }
+    .uc-row { grid-template-columns: 1fr 1fr !important; }
+    .uc-inner { min-width: 0 !important; }
+  }
+  @media (max-width: 560px) {
+    .pillar-grid, .gov-card-grid, .train-grid, .kpi-grid, .benefit-grid, .footer-grid { grid-template-columns: 1fr !important; }
+    .hero-h1 { font-size: 32px !important; }
+  }
+
+  /* density tweak */
+  body.compact section { padding-top: 64px !important; padding-bottom: 66px !important; }
+  /* motion tweak */
+  body.no-motion *, body.no-motion *::before, body.no-motion *::after {
+    transition: none !important; animation: none !important;
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="primitives.jsx"></script>
+<script type="text/babel" src="nav.jsx"></script>
+<script type="text/babel" src="hero.jsx"></script>
+<script type="text/babel" src="pillars-security.jsx"></script>
+<script type="text/babel" src="governance.jsx"></script>
+<script type="text/babel" src="metrics.jsx"></script>
+<script type="text/babel" src="closing.jsx"></script>
+
+<script type="text/babel">
+  function App() {
+    return (
+      <>
+        <Nav />
+        <Hero />
+        <Problem />
+        <Pillars />
+        <Security />
+        <Governance />
+        <Training />
+        <Dashboard />
+        <AssetTypes />
+        <UseCases />
+        <Benefits />
+        <FAQ />
+        <PilotCTA />
+        <Footer />
+      </>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
